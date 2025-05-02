@@ -1,0 +1,95 @@
+#pragma kernel CSEnhancedDistanceSmooth
+
+// Input data
+RWTexture2D<float> HeightMap;
+Texture2D<float> OriginalHeightMap;
+Texture2D<float4> MaskTexture;     // Mask texture (black=modifiable, red=fixed)
+Texture2D<float> DistanceMap;      // Distance map for distance-based smoothing
+
+// Parameters
+uint Width;
+uint Height;
+float BaseSmoothing;
+float ConstrainedHeightProximityWeight;
+float MaxDistance;                 // Maximum distance value for normalization
+
+// Explicitly define sampler states
+SamplerState sampler_OriginalHeightMap;
+SamplerState sampler_MaskTexture;
+SamplerState sampler_DistanceMap;
+
+// Check if coordinates are valid
+bool IsValidCoordinate(uint2 coord)
+{
+    return coord.x < Width && coord.y < Height;
+}
+
+// Check if terrain should be modified at this point (using mask)
+bool ShouldModifyTerrain(uint2 pos)
+{
+    // Sample the mask texture - we're using a pre-built mask so we just need
+    // to check if the pixel is black (modifiable) or red (fixed)
+    float4 maskColor = MaskTexture[pos];
+    return maskColor.r < 0.1 && maskColor.g < 0.1 && maskColor.b < 0.1;
+}
+
+[numthreads(16, 16, 1)]
+void CSEnhancedDistanceSmooth(uint3 id : SV_DispatchThreadID)
+{
+    // Skip if outside the texture boundaries
+    if (id.x >= Width || id.y >= Height)
+        return;
+
+    uint2 currentPos = uint2(id.x, id.y);
+    
+    // Skip if we shouldn't modify this point (fixed point)
+    if (!ShouldModifyTerrain(currentPos))
+        return;
+    
+    // Get the normalized distance value [0,1]
+    float distanceValue = DistanceMap[currentPos];
+    float normalizedDistance = distanceValue / MaxDistance;
+    
+    // Calculate smoothing factor based on distance to fixed areas
+    float smoothingFactor = BaseSmoothing * (1.0f - normalizedDistance);
+    
+    // Fixed weight for the center point to ensure stability
+    float centerWeight = 1.0f;
+    float totalWeight = centerWeight;
+    float smoothedHeight = OriginalHeightMap[currentPos] * centerWeight;
+    
+    // Process all 8 neighbors
+    for (int dy = -1; dy <= 1; dy++)
+    {
+        for (int dx = -1; dx <= 1; dx++)
+        {
+            // Skip the center point (already added)
+            if (dx == 0 && dy == 0)
+                continue;
+                
+            // Be careful with signed/unsigned conversion here
+            int x = int(id.x) + dx;
+            int y = int(id.y) + dy;
+            
+            // Skip invalid coordinates (using integer comparison to handle negative values)
+            if (x < 0 || x >= int(Width) || y < 0 || y >= int(Height))
+                continue;
+
+            uint2 neighborPos = uint2(x, y);
+            
+            // Calculate neighbor weight
+            float neighborWeight = smoothingFactor;
+            
+            // If this neighbor is closer to fixed areas, give it more weight
+            if (DistanceMap[neighborPos] < distanceValue) {
+                neighborWeight *= ConstrainedHeightProximityWeight;
+            }
+            
+            totalWeight += neighborWeight;
+            smoothedHeight += OriginalHeightMap[neighborPos] * neighborWeight;
+        }
+    }
+    
+    // Set the height of the current point to the weighted average height
+    HeightMap[currentPos] = smoothedHeight / totalWeight;
+}

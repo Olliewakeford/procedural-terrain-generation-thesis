@@ -1,0 +1,76 @@
+#pragma kernel CSBasicSmooth
+
+// Input data
+RWTexture2D<float> HeightMap;
+Texture2D<float> OriginalHeightMap;
+Texture2D<float4> MaskTexture;     // Mask texture (black=modifiable, red=fixed)
+
+// Parameters
+uint Width;
+uint Height;
+
+// Explicitly define sampler states
+SamplerState sampler_OriginalHeightMap;
+SamplerState sampler_MaskTexture;
+
+// Check if coordinates are valid
+bool IsValidCoordinate(uint2 coord)
+{
+    return coord.x < Width && coord.y < Height;
+}
+
+// Check if terrain should be modified at this point (using mask)
+bool ShouldModifyTerrain(uint2 pos)
+{
+    // Sample the mask texture - we're using a pre-built mask so we just need
+    // to check if the pixel is black (modifiable) or red (fixed)
+    float4 maskColor = MaskTexture[pos];
+    return maskColor.r < 0.1 && maskColor.g < 0.1 && maskColor.b < 0.1;
+}
+
+[numthreads(16, 16, 1)]
+void CSBasicSmooth(uint3 id : SV_DispatchThreadID)
+{
+    // Skip if outside the texture boundaries
+    if (id.x >= Width || id.y >= Height)
+        return;
+
+    uint2 currentPos = uint2(id.x, id.y);
+    
+    // Skip if we shouldn't modify this point (fixed point)
+    if (!ShouldModifyTerrain(currentPos))
+        return;
+    
+    // Start with current height
+    float avgHeight = OriginalHeightMap[currentPos];
+    float count = 1.0; // Count includes the current point
+    
+    // Process all 8 neighbors
+    for (int dy = -1; dy <= 1; dy++)
+    {
+        for (int dx = -1; dx <= 1; dx++)
+        {
+            // Skip the center point (already added)
+            if (dx == 0 && dy == 0)
+                continue;
+                
+            // Be careful with signed/unsigned conversion here
+            int x = int(id.x) + dx;
+            int y = int(id.y) + dy;
+            
+            // Skip invalid coordinates (using integer comparison to handle negative values)
+            if (x < 0 || x >= int(Width) || y < 0 || y >= int(Height))
+                continue;
+                
+            uint2 neighborPos = uint2(x, y);
+
+            // Always include neighbor heights, regardless of whether they're fixed points
+            // This is crucial for smoothing at the boundaries of fixed areas
+            avgHeight += OriginalHeightMap[neighborPos];
+            count += 1.0;
+        }
+    }
+    
+    // Set the height of the current point to the average height
+    HeightMap[currentPos] = avgHeight / count;
+}
