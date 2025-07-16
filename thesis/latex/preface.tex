@@ -1,0 +1,36 @@
+\chapter*{Introduction}
+\addcontentsline{toc}{chapter}{Introduction}
+
+Modern computer graphics applications frequently require the integration of predetermined structures within natural-looking landscapes. Whether placing road networks through virtual mountains, positioning buildings on digital terrain, or creating training simulations with fixed infrastructure, developers face a fundamental challenge in how to generate realistic surrounding landscape that seamlessly blends with these fixed elements.
+
+This thesis addresses \textbf{procedural terrain generation} with \textbf{fixed height constraints}. Procedural generation uses mathematical algorithms to automatically create content (in our case, terrain landscapes) rather than requiring artists or developers to manually design every feature in the environment. Although these algorithms are great at producing vast and varied terrains efficiently, they struggle to respect the predetermined constraint, for example, the height of a feature. Consider a virtual road that must remain perfectly flat for vehicles to travel, here traditional procedural methods would either ignore this requirement, creating an unusable bumpy road, or produce harsh, cliff-like edges where the road meets the surrounding landscape.
+
+The need for this technology spans multiple fields. Game developers require ways of placing designed areas within larger procedural worlds without visible transition boundaries. Others might need visualisation tools that show how proposed developments would sit within the existing landscape or for creating virtual simulations with realistic environments where predetermined structures blend naturally with their surroundings. Each application shares the same fundamental requirement: having the ability to respect \textbf{\textit{exact}} height constraints while maintaining visual realism.
+
+Our work aims to solve this integration challenge through a \textbf{distance-based} approach: the \textit{further} a point is from the nearest fixed area, the \textit{less} influence the height of the fixed area has on the point. This creates gentle, natural transitions rather than abrupt boundaries. 
+
+A significant barrier to using procedural generation has been the complexity of \textbf{parameter tuning}. These algorithms often require adjusting dozens of numerical values, for example, the smoothness factor or maximum height of the resulting terrain, to achieve the desired results, demanding the expertise that most artists lack. To address this, we aim to develop an \textit{Interactive Genetic Algorithm} that presents users with visual options rather than numerical parameters.
+
+\hfill
+
+We have three primary objectives for this thesis:
+\begin{enumerate}
+    \item Develop a flexible and generalisable methodology that creates natural transitions between fixed and procedural terrain;
+    \item Make the system accessible to non-expert users through an intuitive, visual-based and interactive approach;
+    \item Provide a practical implementation that integrates with existing development workflows, specifically within the Unity game engine.
+\end{enumerate}
+
+\hfill
+
+\hfill
+
+The thesis structure reflects our systematic approach to achieving these goals:
+\begin{itemize}
+    \item Chapter \ref{Chapter1} establishes the technical foundation by examining existing terrain generation techniques and their limitations with constraints;
+    \item Chapter \ref{Chapter2} presents our system architecture, demonstrating how modular design enables flexible terrain workflows;
+    \item Chapter \ref{Chapter3} introduces our distance-based methodology for natural transitions;
+    \item Chapter \ref{Chapter4} details our \textit{Interactive Genetic Algorithm} that simplifies parameter selection;
+    \item Chapter \ref{Chapter5} evaluates our approach through case studies and performance analysis. 
+\end{itemize}
+
+Through this work, we seek to bridge the gap between artistic control and algorithmic generation, enabling developers to leverage the efficiency of procedural methods while maintaining precise control where needed. The goal is a \textbf{terrain} that appears as though fixed elements were \textit{naturally} placed within an existing landscape, rather than forcing the landscape to accommodate them.

@@ -1,0 +1,24 @@
+\chapter*{Conclusion}
+\label{epilog}
+\addcontentsline{toc}{chapter}{Conclusion}
+
+We conclude that the goals of this thesis were successfully achieved. We presented three key innovations that together solve the constrained terrain generation problem:
+
+\textbf{The Distance-Based Methodology} represents our core technical contribution. We devised a novel approach that treats constraints as \textit{sources} of influence rather than \textit{boundaries} to be joined. By calculating distances from each terrain point to the nearest fixed point, we created a framework for natural transitions. For this, we developed two techniques: \textbf{distance-based height scaling} that adjusts terrain elevations globally, and \textbf{enhanced distance-based smoothing} that preserves detail while ensuring smooth integration into the constraints. The elegance lies in its universality, as our method works with any constraint pattern and any terrain generation algorithm.
+
+\textbf{The Interactive Genetic Algorithm Adaptation} transforms parameter optimisation into visual selection. We adapted existing IGA techniques specifically for our system, introducing crucial innovations in the process. Our idea of a domain-specific initialisation strategy ensures that evolution begins with sensible terrain configurations rather than random ones. Similarly, our specialised and smart mutation operators increase the diversity of solutions to improve generalisation of the constraints that the IGA can handle. These adaptations proved surprisingly effective across diverse constraint types, from road networks to coastlines, and allowed the evolutionary process to provide natural-looking terrains efficiently.
+
+\textbf{The System Implementation} demonstrates our commitment to practical usability. We designed and coded a component-based architecture that separates concerns while enabling GPU acceleration for performance-critical operations. The design allows new algorithms to be added without modifying existing code, while Unity integration provides a familiar environment for developers.
+
+Our system shows particular promise for game development, especially racing games where track layouts must integrate naturally with terrain. By eliminating manual terrain sculpting around predetermined heights, we enable rapid iteration and exploration of design alternatives.
+
+The success of our domain-specific initialisation and mutation strategies suggests broader applications. These techniques could benefit any procedural generation system with subjective quality metrics. Similarly, the distance grid concept invites extensions, perhaps density-based approaches considering constraint concentration rather than just nearest distance, which could create more complex influence patterns.
+
+Through inventing the distance-based approach, implementing an accessible IGA with novel adaptations, and creating a flexible system architecture, we have shown that natural constraint integration is achievable. Our work demonstrates that technical sophistication need not mean user complexity, and that constraints need not constrain creativity.
+
+The true innovation lies not in any single component but in their harmony. The distance-based methodology provides the mathematical foundation, the adapted IGA makes the system accessible, and the modular implementation ensures practical usability. Together, they transform constrained terrain generation from a technical challenge into a creative opportunity.
+
+As virtual worlds grow ever larger and more detailed, we believe our contributions provide both immediate value and a foundation for future innovation. We have created a system where procedural efficiency meets artistic control, where complex algorithms serve intuitive creation, and where fixed constraints become the starting point for natural, beautiful terrains.
+
+
+Focus on results only. 
