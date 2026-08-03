@@ -105,14 +105,14 @@ Because the honest picture matters more than the flattering one:
 
 ```
 /thesis
-  thesis.pdf         — the submitted thesis (~65 pages)
-  latex/             — LaTeX source (MFF UK thesis template)
-/unity               — the Unity implementation, as submitted with the thesis
-  README.md          — install/usage instructions, parameter reference
-  DEVELOPER_DOCUMENTATION.md — architecture, extension guide
+  thesis.pdf          the submitted thesis (~65 pages)
+  latex/              LaTeX source (MFF UK thesis template)
+/unity                the Unity implementation, as submitted with the thesis
+  README.md           install/usage instructions, parameter reference
+  DEVELOPER_DOCUMENTATION.md  architecture, extension guide
 /docs
-  poster.pdf         — print poster (defence)
-  defence_presentation.pdf — thesis defence slide deck
+  poster.pdf          print poster (defence)
+  defence_presentation.pdf  thesis defence slide deck
 ```
 
 ## Running the Unity tool
