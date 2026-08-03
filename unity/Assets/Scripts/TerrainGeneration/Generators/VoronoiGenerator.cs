@@ -55,7 +55,7 @@ namespace TerrainGeneration.Generators
         /// </summary>
         [SerializeField] private int maxPlacementAttempts = 100;
         
-        private const int DETERMINISTIC_SEED = 42;
+        private const int DeterministicSeed = 42;
         
         /// <summary>
         /// Gets or sets the number of mountain/hill peaks to generate.
@@ -173,7 +173,7 @@ namespace TerrainGeneration.Generators
         {
             if (UseDeterministicSeed)
             {
-                UnityEngine.Random.InitState(DETERMINISTIC_SEED);
+                UnityEngine.Random.InitState(DeterministicSeed);
             }
             
             // Only calculate distance requirements if we're avoiding constrained points

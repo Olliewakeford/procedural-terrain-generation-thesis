@@ -31,7 +31,7 @@ namespace TerrainGeneration.Generators
         /// </summary>
         [SerializeField] private float initialRandomRange = 0.5f;
         
-        private const int DETERMINISTIC_SEED = 42;
+        private const int DeterministicSeed = 42;
         /// <summary>
         /// Gets or sets the minimum height value for generated terrain.
         /// </summary>
@@ -117,7 +117,7 @@ namespace TerrainGeneration.Generators
         public void Generate(float[,] heightMap, int width, int height, Func<int, int, bool> shouldModify, float[,] distanceGrid = null )
         {
             System.Random prng = UseDeterministicSeed ? 
-                new System.Random(DETERMINISTIC_SEED) : 
+                new System.Random(DeterministicSeed) : 
                 new System.Random();
             
             // Make sure we're working with a power of 2 plus 1 sized grid (necessary for diamond-square)

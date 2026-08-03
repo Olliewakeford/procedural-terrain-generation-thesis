@@ -33,7 +33,7 @@ namespace TerrainGeneration.Generators
 
         private Vector2 _randomOffset;
         
-        private const int DETERMINISTIC_SEED = 42;
+        private const int DeterministicSeed = 42;
         
         /// <summary>
         /// Gets or sets the frequency of the Perlin noise, controlling the scale of terrain features.
@@ -120,7 +120,7 @@ namespace TerrainGeneration.Generators
         {
             if (UseDeterministicSeed)
             {
-                UnityEngine.Random.InitState(DETERMINISTIC_SEED);
+                UnityEngine.Random.InitState(DeterministicSeed);
             }
 
             _randomOffset = new Vector2(

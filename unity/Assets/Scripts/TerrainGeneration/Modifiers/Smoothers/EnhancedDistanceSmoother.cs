@@ -232,58 +232,59 @@ namespace TerrainGeneration.Modifiers.Smoothers
             UnityEngine.Object.DestroyImmediate(distanceMapTex); // Clean up temporary texture
         }
         
-        private void FallbackToCPU(float[,] heightMap, int width, int height, Func<int, int, bool> shouldModify, 
+        private void FallbackToCPU(float[,] heightMap, int width, int height, Func<int, int, bool> shouldModify,
                           float[,] distanceGrid, float maxDistanceValue)
-{
-    for (int iteration = 0; iteration < iterations; iteration++)
-    {
-        // Create a copy of the height map to reference original heights
-        float[,] originalHeightMap = new float[width, height];
-        Array.Copy(heightMap, originalHeightMap, heightMap.Length);
-        
-        for (int y = 0; y < height; y++)
         {
-            for (int x = 0; x < width; x++)
+            for (int iteration = 0; iteration < iterations; iteration++)
             {
-                if (!shouldModify(x, y)) continue;
+                // Create a copy of the height map to reference original heights
+                float[,] originalHeightMap = new float[width, height];
+                Array.Copy(heightMap, originalHeightMap, heightMap.Length);
 
-                // Normalize the distance to [0,1] range
-                float normalizedDistance = distanceGrid[x, y] / maxDistanceValue;
-                
-                // Calculate smoothing factor based on distance
-                float smoothingFactor = baseSmoothing * (1.0f - normalizedDistance);
-                
-                // Fixed weight for the center point to ensure stability
-                float centerWeight = 1.0f;
-                float totalWeight = centerWeight;
-                float smoothedHeight = originalHeightMap[x, y] * centerWeight;
-                
-                // Get neighboring heights and add their contribution
-                List<Vector2> neighbours = TerrainManager.GenerateNeighbours(new Vector2(x, y), width, height);
-                
-                foreach (Vector2 n in neighbours) 
+                for (int y = 0; y < height; y++)
                 {
-                    int nx = (int)n.x;
-                    int ny = (int)n.y;
-                    
-                    // Calculate neighbor weight
-                    float neighborWeight = smoothingFactor;
-                    
-                    // Add road proximity weighting if enabled
-                    if (distanceGrid[nx, ny] < distanceGrid[x, y]) {
-                        // This neighbor is closer to road, give it more weight
-                        neighborWeight *= constrainedHeightProximityWeight;
-                    }
-                    
-                    totalWeight += neighborWeight;
-                    smoothedHeight += originalHeightMap[nx, ny] * neighborWeight;
-                }
+                    for (int x = 0; x < width; x++)
+                    {
+                        if (!shouldModify(x, y)) continue;
 
-                heightMap[x, y] = smoothedHeight / totalWeight;
+                        // Normalize the distance to [0,1] range
+                        float normalizedDistance = distanceGrid[x, y] / maxDistanceValue;
+
+                        // Calculate smoothing factor based on distance
+                        float smoothingFactor = baseSmoothing * (1.0f - normalizedDistance);
+
+                        // Fixed weight for the center point to ensure stability
+                        float centerWeight = 1.0f;
+                        float totalWeight = centerWeight;
+                        float smoothedHeight = originalHeightMap[x, y] * centerWeight;
+
+                        // Get neighboring heights and add their contribution
+                        List<Vector2> neighbours = TerrainManager.GenerateNeighbours(new Vector2(x, y), width, height);
+
+                        foreach (Vector2 n in neighbours)
+                        {
+                            int nx = (int)n.x;
+                            int ny = (int)n.y;
+
+                            // Calculate neighbor weight
+                            float neighborWeight = smoothingFactor;
+
+                            // Add road proximity weighting if enabled
+                            if (distanceGrid[nx, ny] < distanceGrid[x, y])
+                            {
+                                // This neighbor is closer to road, give it more weight
+                                neighborWeight *= constrainedHeightProximityWeight;
+                            }
+
+                            totalWeight += neighborWeight;
+                            smoothedHeight += originalHeightMap[nx, ny] * neighborWeight;
+                        }
+
+                        heightMap[x, y] = smoothedHeight / totalWeight;
+                    }
+                }
             }
         }
-    }
-}
         #endregion
     }
 }

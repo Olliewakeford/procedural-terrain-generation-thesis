@@ -41,7 +41,7 @@ namespace TerrainGeneration.Modifiers.Erosion
         /// </summary>
         [SerializeField] private float solubility = 0.005f;
         
-        private const int DETERMINISTIC_SEED = 42;
+        private const int DeterministicSeed = 42;
         
         private static System.Random _rng = new();
         
@@ -136,8 +136,8 @@ namespace TerrainGeneration.Modifiers.Erosion
         {
             if (UseDeterministicSeed)
             {
-                Random.InitState(DETERMINISTIC_SEED);
-                _rng = new System.Random(DETERMINISTIC_SEED);
+                Random.InitState(DeterministicSeed);
+                _rng = new System.Random(DeterministicSeed);
             }
             
             float[,] erosionMap = new float[width, height]; // Create erosion map to store erosion values

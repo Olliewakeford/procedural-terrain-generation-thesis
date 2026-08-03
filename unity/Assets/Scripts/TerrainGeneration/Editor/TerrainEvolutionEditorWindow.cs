@@ -191,8 +191,7 @@ namespace TerrainGeneration.Editor
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             
             EditorGUILayout.LabelField("Evolution Settings", EditorStyles.boldLabel);
-            
-            EditorGUI.BeginChangeCheck();
+
             _populationSize = EditorGUILayout.IntSlider("Population Size", _populationSize, 8, 50);
             
             _selectionCount = EditorGUILayout.IntSlider("Selection Count", _selectionCount, 1, 6);
@@ -447,7 +446,7 @@ namespace TerrainGeneration.Editor
             // Collect selected indices
             List<int> selectedIndices = new List<int>();
     
-            // mMake the favourite terrain first in the list
+            // Make the favourite terrain first in the list
             if (_favouriteTerrainIndex >= 0 && _selectedTerrains[_favouriteTerrainIndex])
             {
                 selectedIndices.Add(_favouriteTerrainIndex);
