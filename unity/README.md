@@ -32,12 +32,12 @@ The system is organized into several key components:
   - `PerlinNoiseGenerator.cs`: Generates terrain using Perlin noise
   - `VoronoiGenerator.cs`: Creates mountainous terrain using Voronoi diagrams
   - `MidpointDisplacementGenerator.cs`: Implements diamond-square terrain generation
-  - `UniformHeightGenerator.cs`: Applies uniform height changes
 
 - **Modifiers**: Terrain modification algorithms
   - **Smoothers**: Algorithms for smoothing terrain
   - **Erosion**: Simulates natural erosion processes
-  - **HeightAdjusters**: Adjusts terrain heights based on various criteria
+  - **HeightAdjusters**: Adjusts terrain heights based on various criteria, including
+    `UniformHeightModifier.cs` (uniform height changes) and `DistanceBasedHeightScaler.cs`
 
 - **InteractiveGeneticAlgorithm**: Components for interactive evolution
   - `TerrainEvolutionManager.cs`: Manages evolution of terrain parameters
@@ -148,13 +148,13 @@ The system includes various operations that can be applied to the terrain:
 - **Perlin Noise Generator**: Creates natural-looking terrain using Perlin noise with fractal Brownian Motion
 - **Voronoi Generator**: Creates mountain-like formations using Voronoi diagrams
 - **Midpoint Displacement Generator**: Creates fractal terrain using midpoint displacement
-- **Uniform Height Generator**: Applies uniform height adjustments
 
 #### Modifiers
 
 - **Basic Smoother**: Simple uniform smoothing
 - **Enhanced Distance Smoother**: Smoothes based on nearest distance to fixed points
 - **Distance-Based Height Scaler**: Adjusts heights based on distance to fixed points
+- **Uniform Height Modifier**: Applies uniform height adjustments
 - **Hydraulic Erosion**: Simulates water flow over terrain
 - **Thermal Erosion**: Simulates material slumping
 
@@ -227,7 +227,7 @@ Creates fractal terrain using the Diamond-Square (midpoint displacement) algorit
 - **Smoothness** (0.1-1.0): Controls the roughness of the terrain. Higher values (closer to 1) create smoother terrain features with less dramatic height variations between adjacent points.
 - **Initial Random Range** (0.1-1.0): Initial random displacement range applied to terrain corners. Higher values create more dramatic variation in the terrain's initial state, affecting the overall character of the generated landscape.
 
-### Uniform Height Generator
+### Uniform Height Modifier
 
 Applies uniform height changes to the terrain.
 
