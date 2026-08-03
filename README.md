@@ -105,7 +105,7 @@ Because the honest picture matters more than the flattering one:
 
 ```
 /thesis
-  MyThesis.pdf       — the submitted thesis (~65 pages)
+  thesis.pdf         — the submitted thesis (~65 pages)
   latex/             — LaTeX source (MFF UK thesis template)
 /unity               — the Unity implementation, as submitted with the thesis
   README.md          — install/usage instructions, parameter reference
@@ -121,6 +121,21 @@ See `unity/README.md` for full instructions. Short version: requires Unity 6+,
 open `/unity` as a project in Unity Hub, then either use the `TerrainManager`
 component directly on a Unity Terrain object, or open
 `Tools > Terrain > Interactive Evolution` for the genetic-algorithm workflow.
+
+### Test scene data
+
+`unity/Assets/TestData` keeps a constraint mask for every demo scene, but I
+trimmed the baked heightmap data those masks originally produced: the four
+largest `splat.asset` files and five of the six `New Terrain.asset` files were
+2 to 13 MB each, baked binary output rather than anything hand-written, and
+together they made up most of this repository's size. I kept one full example
+of each (`30_Valley`, `Building_Foundations`) so the format is still visible.
+Opening any of the other scenes (Mayhem_27, Raised_Snake_28, Snake_28,
+Border_29, Lake_Network, Island, Mountain_Ridge, Random_Shapes, NoConstraints)
+will show an empty or default terrain rather than the original baked result.
+The mask for that scene is still there, so running the TerrainManager or the
+Interactive Genetic Algorithm against it regenerates a constrained terrain for
+that scene, just not byte-identical to what was originally baked.
 
 ## On the four original repos
 
@@ -160,6 +175,7 @@ good ones: https://oliverwakeford.com/projects/terrain-generation
 
 ## License
 
-The Unity code (`/unity`) is MIT-licensed, see `unity/LICENSE`. The thesis
-text and LaTeX source are not under an open license; usual academic-work
-copyright applies to Oliver Wakeford and Charles University.
+The root `LICENSE` file (MIT) covers the code in this repository, matching
+`unity/LICENSE`. The thesis text and LaTeX source are not under an open
+license; usual academic-work copyright applies to Oliver Wakeford and Charles
+University.
